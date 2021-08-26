@@ -231,6 +231,6 @@ will use the assigned AWS provider tags
 ```
 
 ### Conclusion
-Terraform default tags for AWS is an easy way to **add metadata to all AWS resources**.
+Terraform default tags for AWS are an easy way to **add metadata to all AWS resources**.
 Defining the default tags in one code location follows the best practice of **DRY (Don't Repeat Yourself)**.
 If you have complex tagging requirements, **Terraform is customizable** to meet your needs.
