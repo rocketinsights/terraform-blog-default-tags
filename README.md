@@ -3,8 +3,8 @@
 [AWS tags](https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html) are key-value labels you can assign to AWS resources 
 that give extra information about it. 
 
-For example, you can tag an EC2 instance with _owner = Rocket Insights_. This tells an AWS admin the contact information 
-in case the server has errors. The owner tag can be used by AWS Billing to see how much money that owner is spending
+For example, you can tag an EC2 instance with _owner = Rocket Insights_. The owner tag tells an AWS admin the contact information 
+in case the server has errors. AWS Billing can use the owner tag to see how much money that owner is spending
 each month. Automation tools can filter for the owner tag to only update those servers.
 
 Starting with [Terraform](https://www.terraform.io/) 0.12.31 and AWS provider v3.38.0, Hashicorp added the default tags feature.
