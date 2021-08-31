@@ -6,7 +6,7 @@ that give extra information about it.
 Best practices that the Rocket Insights DevOps practice recommends:
 * Define an explicit ruleset for tag key naming and stick with it.
 
-    Inconsistent tags keys such as "appid", "Application ID", and "App_ID" are frustrating to use
+    Inconsistent tags keys such as "appid", "Application ID", and "App_ID" are frustrating to use.
 
 * Strive for more tags, not less.
 
@@ -32,10 +32,9 @@ Best practices that the Rocket Insights DevOps practice recommends:
 
     **pii**: a true/false value if the resource stores personal identifiable information
 
-* Tag all AWS resources.
+* Tag all Terraform created AWS resources with code path info. 
 
-* Tag Terraform created AWS resources with code path info 
-  Terraform base and module path results in easier infrastructure codebase maintenance.
+  Tagging all AWS resources with the Terraform base and module path results in easier infrastructure maintenance.
 
 Starting with [Terraform](https://www.terraform.io/) 0.12.31 and AWS provider v3.38.0, Hashicorp added the default tags feature.
 You can now **configure AWS tags in one place** and **automatically apply them to all AWS resources**. You no longer have to manually 
