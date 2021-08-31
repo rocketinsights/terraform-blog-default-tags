@@ -3,7 +3,7 @@
 [AWS tags](https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html) are key-value labels you can assign to AWS resources 
 that give extra information about it. 
 
-Best practices that the Rocket Insights DevOps practice recommends:
+Rocket Insights DevOps practice recommends the following AWS tags best practices:
 * Define an explicit ruleset for tag key naming and stick with it.
 
     Inconsistent tags keys such as "appid", "Application ID", and "App_ID" are frustrating to use.
