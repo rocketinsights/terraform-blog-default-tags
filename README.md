@@ -3,11 +3,43 @@
 [AWS tags](https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html) are key-value labels you can assign to AWS resources 
 that give extra information about it. 
 
+Best practices that the Rocket Insights DevOps practice recommends:
+* Define an explicit ruleset for tag key naming and stick with it.
+
+    Inconsistent tags keys such as "appid", "Application ID", and "App_ID" are frustrating to use
+
+* Strive for more tags, not less.
+
+    The minimum Rocket Insights set of tags are
+
+    **name**: human-readable resource name
+
+    **app-id**: the application using the resource
+
+    **app-role**: the resource's technical function, e.g. webserver, database
+
+    **app-purpose**: the resource's business purpose, e.g. "frontend ui", "payment processor"
+
+    **environment**: dev, test, or prod
+
+    **project**: what projects use the resource
+
+    **owner**: who to contact about the resource
+
+    **cost-center**: who to bill for the resource usage
+
+    **automation-exclude**: a true/false value for automation not to modify the resource
+
+    **pii**: a true/false value if the resource stores personal identifiable information
+
+* Tag all AWS resources.
+
+* Tag Terraform created AWS resources with code path info 
+  Terraform base and module path results in easier infrastructure codebase maintenance.
+
 Starting with [Terraform](https://www.terraform.io/) 0.12.31 and AWS provider v3.38.0, Hashicorp added the default tags feature.
 You can now **configure AWS tags in one place** and **automatically apply them to all AWS resources**. You no longer have to manually 
-add `tags` blocks to each individual AWS resource. 
-
-As a best practice, we recommend tagging all AWS resources. This will allow you to easily track costs, identify subject matter experts, troubleshoot, manage automation, and generally keep your architecture more organized. In addition, tagging AWS resources with the Terraform base and module path results in easier infrastructure codebase maintenance.
+add `tags` blocks to each individual Terraform AWS resource. 
 
 This Terraform AWS default tags tutorial will show ...
 * Basic usage
