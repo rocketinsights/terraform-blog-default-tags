@@ -2,6 +2,6 @@ module "default-tags-dynamodb-add" {
   source = "./tfmodules/default-tags-dynamodb-add"
 
   tags = {
-    module-project = "Adding Module Tags"
+    app-purpose = "Adding Module Tags"
   }
 }

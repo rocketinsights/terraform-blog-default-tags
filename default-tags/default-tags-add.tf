@@ -9,7 +9,7 @@ resource "aws_dynamodb_table" "default-tags-add" {
   }
 
   tags = {
+    cost-center = "Rocket Insights Billing"
     project     = "Project Override"
-    sub-project = "Subproject Add"
   }
 }

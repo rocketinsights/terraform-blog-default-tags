@@ -8,7 +8,7 @@ Best practices that the Rocket Insights DevOps practice recommends:
 
     Inconsistent tags keys such as "appid", "Application ID", and "App_ID" are frustrating to use.
 
-* Strive for more tags, not less.
+* Strive for more tags, not less. Tag all AWS resources.
 
     The minimum Rocket Insights set of tags are
 
@@ -54,6 +54,7 @@ to all AWS resources
 
 ```terraform
 locals {
+  // Change the local variable to match the git repo name
   terraform-git-repo = "terraform-blog-default-tags"
 }
 provider "aws" {
@@ -62,7 +63,9 @@ provider "aws" {
     tags = {
 	  owner               = "Rocket Insights"	
       project             = "Project A"
-      // Tagging Terraform path helps maintenance
+      // This regex results in the terraform git repo name and any sub-directories.
+      // For this repo, terraform-base-path is terraform-blog-default-tags/default-tags
+      // This tag helps AWS UI users discover what Terraform git repo and directory to modify
       terraform-base-path = replace(path.cwd, "/^.*?(${local.terraform-git-repo}\\/)/", "$1")
     }
   }
@@ -94,8 +97,8 @@ resource "aws_dynamodb_table" "default-tags-add" {
   .......
   
   tags = {
+    cost-center = "Rocket Insights Billing"
     project     = "Project Override"
-    sub-project = "Subproject Add"
   }
 }
 
@@ -103,9 +106,9 @@ resource "aws_dynamodb_table" "default-tags-add" {
 The final tags for aws_dynamodb_table.default-tags-add are
 
 ```
+"cost-center"         = "Rocket Insights Billing"
 "owner"               = "Rocket Insights"
 "project"             = "Project Override"
-"sub-project"         = "Subproject Add"
 "terraform-base-path" = "terraform-blog-default-tags/default-tags"
 ```
 
@@ -118,8 +121,8 @@ provider "aws" {
   region = "us-east-1"
   default_tags {
     tags = {
-      modified   = "Terraform"
-      owner      = "Owner B"
+      app-id = "Terraform Default Tags"
+      owner  = "Alt Owner"
     }
   }
 }
@@ -132,8 +135,8 @@ resource "aws_dynamodb_table" "default-tags-alternate" {
 ```
 The final tags for aws_dynamodb_table.default-tags-alternate are
 ```
-"modified"   = "Terraform"
-"owner"      = "Owner B"
+"app-id" = "Terraform Default Tags"
+"owner"  = "Alt Owner"
 ```
 
 ### Modules and Default Tags
@@ -160,7 +163,7 @@ module "default-tags-dynamodb-add" {
   source = "./tfmodules/default-tags-dynamodb-add"
 
   tags = {
-    module-project = "Adding Module Tags"
+    app-purpose = "Adding Module Tags"
   }
 }
 ```
@@ -182,7 +185,7 @@ resource "aws_dynamodb_table" "default-tags-module-add" {
 ```
 The final tags for module.default-tags-dynamodb-add.aws_dynamodb_table.default-tags-module-add are
 ```
-"module-project"        = "Adding Module Tags"
+"app-purpose   "        = "Adding Module Tags"
 "owner"                 = "Rocket Insights"
 "project"               = "Project A"
 "terraform-base-path"   = "terraform-blog-default-tags/default-tags"
@@ -194,6 +197,17 @@ If an AWS module requires alternate default tags, an alternate AWS provider with
 and the new provider can be passed to module
 
 ```terraform
+provider "aws" {
+  alias  = "alt-tags"
+  region = "us-east-1"
+  default_tags {
+    tags = {
+      app-id = "Terraform Default Tags"
+      owner  = "Alt Owner"
+    }
+  }
+}
+
 module "default-tags-dynamodb-alternate" {
   source = "./tfmodules/default-tags-dynamodb"
   providers = {
@@ -204,8 +218,8 @@ module "default-tags-dynamodb-alternate" {
 ```
 The final tags for module.default-tags-dynamodb-alternate.aws_dynamodb_table.default-tags-module are
 ```
-"modified" = "Terraform"
-"owner"    = "Owner B"
+"app-id" = "Terraform Default Tags"
+"owner"  = "Owner B"
 ```
 ### Modules with both Default and Alternate Tags
 If an AWS module requires both the default and alternate default tags, the default and alternate AWS providers can be defined
@@ -214,6 +228,27 @@ and both providers can be passed to module. Then the module can assign which AWS
 This is valuable since certain AWS resources like aws_s3_bucket_object have a maximum limit of 10 tags.
 
 ```terraform
+provider "aws" {
+  region = "us-east-1"
+  default_tags {
+    tags = {
+      owner               = "Rocket Insights"
+      project             = "Project A"
+      terraform-base-path = replace(path.cwd, "/^.*?(${local.terraform-git-repo}\\/)/", "$1")
+    }
+  }
+}
+
+provider "aws" {
+  alias  = "alt-tags"
+  region = "us-east-1"
+  default_tags {
+    tags = {
+      app-id = "Terraform Default Tags"
+      owner  = "Alt Owner"
+    }
+  }
+}
 module "default-and-alternate-tags-dynamodb" {
   source = "./tfmodules/default-and-alternate-tags-dynamodb"
   providers = {
