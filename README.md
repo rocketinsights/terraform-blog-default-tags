@@ -1,4 +1,4 @@
-## Best Practice for Terraform AWS Tags
+## Best Practices for Terraform AWS Tags
 
 [AWS tags](https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html) are key-value labels you can assign to AWS resources 
 that give extra information about it. 
