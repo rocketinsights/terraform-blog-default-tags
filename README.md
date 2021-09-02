@@ -81,7 +81,7 @@ resource "aws_dynamodb_table" "default-tags-basic" {
 }
 
 ``` 
-The final tags for aws_dynamodb_table.default-tags-basic are
+The final tags for `aws_dynamodb_table.default-tags-basic` are
 
 ```
 "owner"               = "Rocket Insights"
@@ -89,7 +89,7 @@ The final tags for aws_dynamodb_table.default-tags-basic are
 "terraform-base-path" = "terraform-blog-default-tags/default-tags"
 ```
 ### Alternate Default Tags
-If an AWS resource requires alternate default tags, an alternate AWS provider with new default tags can be defined.
+If an AWS resource requires alternate default tags, define an alternate AWS provider with new default tags.
 
 ```terraform
 provider "aws" {
@@ -109,7 +109,7 @@ resource "aws_dynamodb_table" "default-tags-alternate" {
   ........
 }
 ```
-The final tags for aws_dynamodb_table.default-tags-alternate are
+The final tags for `aws_dynamodb_table.default-tags-alternate` are
 ```
 "app-id" = "Terraform Default Tags"
 "owner"  = "Alt Owner"
@@ -149,7 +149,7 @@ resource "aws_dynamodb_table" "default-tags-add" {
 }
 
 ```  
-The final tags for aws_dynamodb_table.default-tags-add are
+The final tags for `aws_dynamodb_table.default-tags-add` are
 
 ```
 "cost-center"         = "Rocket Insights Billing"
@@ -182,7 +182,7 @@ module "default-tags-dynamodb" {
   source = "./tfmodules/default-tags-dynamodb"
 }
 ```
-The final tags for module.default-tags-dynamodb.aws_dynamodb_table.default-tags-module are
+The final tags for `module.default-tags-dynamodb.aws_dynamodb_table.default-tags-module` are
 ```
 "owner"               = "Rocket Insights"
 "project"             = "Project A"
@@ -190,8 +190,8 @@ The final tags for module.default-tags-dynamodb.aws_dynamodb_table.default-tags-
 ```
 
 ### Modules and Alternate Tags
-If an AWS module requires alternate default tags, an alternate AWS provider with new default tags can be defined
-and the new provider can be passed to module.
+If an AWS module requires alternate default tags, define an alternate AWS provider with new default tags
+and pass the new provider to the module.
 
 ```terraform
 provider "aws" {
@@ -213,17 +213,17 @@ module "default-tags-dynamodb-alternate" {
   .......
 }
 ```
-The final tags for module.default-tags-dynamodb-alternate.aws_dynamodb_table.default-tags-module are
+The final tags for `module.default-tags-dynamodb-alternate.aws_dynamodb_table.default-tags-module` are
 ```
 "app-id" = "Terraform Default Tags"
 "owner"  = "Alt Owner"
 ```
 
 ### Modules with both Default and Alternate Tags
-If an AWS module requires both the default and alternate default tags, the default and alternate AWS providers can be defined
-and both providers can be passed to module. Then the module can assign which AWS resource uses which AWS provider.
+If an AWS module requires both the default and alternate default tags, define the default and alternate AWS providers
+and pass both providers to module. Then the module assigns the correct AWS provider to the AWS resource.
 
-This is valuable since certain AWS resources like aws_s3_bucket_object have a maximum limit of 10 tags.
+This is valuable since certain AWS resources like aws_s3_bucket_object have a **maximum limit of 10 tags**.
 
 ```terraform
 locals {
@@ -282,12 +282,16 @@ resource "aws_dynamodb_table" "default-and-alternate-tags-module-alternate" {
 ```
 The final tags for the two DynamoDB resources in the default-and-alternate-tags-dynamodb TF modules uses 
 the assigned AWS provider tags
+
+The final tags for `module.default-and-alternate-tags-dynamodb.aws_dynamodb_table.default-and-alternate-tags-module-basic` are
 ```terraform
 // module.default-and-alternate-tags-dynamodb.aws_dynamodb_table.default-and-alternate-tags-module-basic
 "owner"               = "Rocket Insights"
 "project"             = "Project A"
 "terraform-base-path" = "terraform-blog-default-tags/default-tags"
 ```
+
+The final tags for `module.default-and-alternate-tags-dynamodb.aws_dynamodb_table.default-and-alternate-tags-module-alternate` are
 ```terraform
 // module.default-and-alternate-tags-dynamodb.aws_dynamodb_table.default-and-alternate-tags-module-alternate
 "app-id" = "Terraform Default Tags"
@@ -345,7 +349,7 @@ resource "aws_dynamodb_table" "default-tags-module-add" {
   )
 }
 ```
-The final tags for module.default-tags-dynamodb-add.aws_dynamodb_table.default-tags-module-add are
+The final tags for `module.default-tags-dynamodb-add.aws_dynamodb_table.default-tags-module-add` are
 ```
 "app-purpose"           = "Adding Module Tags"
 "owner"                 = "Rocket Insights"
