@@ -36,14 +36,15 @@ Rocket Insights DevOps practice recommends the following AWS tags best practices
 
   Tagging all AWS resources with the Terraform base and module path results in easier infrastructure maintenance.
 
-Starting with [Terraform](https://www.terraform.io/) 0.12.31 and AWS provider v3.38.0, Hashicorp added the default tags feature.
+Starting with [Terraform](https://www.terraform.io/) 0.12.31 and [AWS provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs) v3.38.0, 
+HashiCorp added the default tags feature.
 You can now **configure AWS tags in one place** and **automatically apply them to all AWS resources**. You no longer have to manually 
 add `tags` blocks to each individual Terraform AWS resource. 
 
-This Terraform AWS default tags tutorial will show ...
+This Terraform AWS default tags tutorial demonstrates for both Terraform resources and modules:
 * Basic usage
-* Adding and overriding tags to the default
 * Providing alternate default tags
+* Adding and overriding tags to the default
 
 For the full Terraform code, please visit the Rocket Insights [Github repo](https://github.com/rocketinsights/terraform-blog-default-tags/tree/main).
 
@@ -51,7 +52,7 @@ For prettier formatting, please visit the Rocket Insights [blog](best-practices-
 
 ### Basic Usage
 
-The default tags are defined in the AWS provider section. It will automatically be applied
+The default tags are defined in the AWS provider section. It automatically applies
 to all AWS resources
 
 ```terraform
@@ -114,7 +115,7 @@ The final tags for aws_dynamodb_table.default-tags-alternate are
 "owner"  = "Alt Owner"
 ```
 
-### Add and Override default tags
+### Add and Override Default Tags
 If an AWS resource requires more tags in addition to the default tags, simply add the tag to the
 built-in resource `tags` block.
 
@@ -157,7 +158,7 @@ The final tags for aws_dynamodb_table.default-tags-add are
 "terraform-base-path" = "terraform-blog-default-tags/default-tags"
 ```
 
-### Modules and Default Tags
+### Modules Basic Usage
 The AWS default tags apply to existing Terraform AWS modules without any changes needed.
 
 ```terraform
@@ -279,8 +280,8 @@ resource "aws_dynamodb_table" "default-and-alternate-tags-module-alternate" {
   .......
 }
 ```
-The final tags for the two DynamoDB resources in the default-and-alternate-tags-dynamodb TF modules
-will use the assigned AWS provider tags
+The final tags for the two DynamoDB resources in the default-and-alternate-tags-dynamodb TF modules uses 
+the assigned AWS provider tags
 ```terraform
 // module.default-and-alternate-tags-dynamodb.aws_dynamodb_table.default-and-alternate-tags-module-basic
 "owner"               = "Rocket Insights"
@@ -293,7 +294,7 @@ will use the assigned AWS provider tags
 "owner"  = "Alt Owner"
 ```
 
-### Modules and Adding and Overriding default tags
+### Modules and Adding and Overriding Default Tags
 If an AWS module requires more tags in addition to the default tags, simply define the module tags 
 variable and add the tag to the module.
 
