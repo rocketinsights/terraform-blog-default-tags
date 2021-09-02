@@ -11,7 +11,12 @@ resource "aws_dynamodb_table" "default-tags-module-add" {
   // Merge multiple tags maps into one tags map
   // https://www.terraform.io/docs/language/functions/merge.html
   tags = merge(
-    // Tagging Terraform module path helps maintenance
+      // path.module is a built-in Terraform variable that
+      // describes the path of Terraform module
+      // For this repo, the terraform-module-path is
+      // tfmodules/default-tags-dynamodb-add
+      // Along with the terraform-base-path tag, this tag helps AWS UI users
+      // discover what module repo to modify
     { terraform-module-path = path.module },
     var.tags
   )

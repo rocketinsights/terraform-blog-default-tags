@@ -10,7 +10,7 @@ Rocket Insights DevOps practice recommends the following AWS tags best practices
 
 * Strive for more tags, not less. Tag all AWS resources.
 
-    The minimum Rocket Insights set of tags are
+    The minimum Rocket Insights recommended set of tags are
 
     **name**: human-readable resource name
 
@@ -28,7 +28,7 @@ Rocket Insights DevOps practice recommends the following AWS tags best practices
 
     **cost-center**: who to bill for the resource usage
 
-    **automation-exclude**: a true/false value for automation not to modify the resource
+    **automation-exclude**: a true/false value for automation to not modify the resource
 
     **pii**: a true/false value if the resource stores personal identifiable information
 
@@ -47,6 +47,8 @@ This Terraform AWS default tags tutorial will show ...
 
 For the full Terraform code, please visit the Rocket Insights [Github repo](https://github.com/rocketinsights/terraform-blog-default-tags/tree/main).
 
+For prettier formatting, please visit the Rocket Insights [blog](best-practices-for-terraform-aws-tags).
+
 ### Basic Usage
 
 The default tags are defined in the AWS provider section. It will automatically be applied
@@ -57,6 +59,7 @@ locals {
   // Change the local variable to match the git repo name
   terraform-git-repo = "terraform-blog-default-tags"
 }
+
 provider "aws" {
   region = "us-east-1"
   default_tags {
@@ -70,6 +73,7 @@ provider "aws" {
     }
   }
 }
+
 resource "aws_dynamodb_table" "default-tags-basic" {
   name     = "default-tags-basic"
   .......
@@ -83,37 +87,8 @@ The final tags for aws_dynamodb_table.default-tags-basic are
 "project"             = "Project A"
 "terraform-base-path" = "terraform-blog-default-tags/default-tags"
 ```
-
-### Add and Override default tags
-If an AWS resource requires more tags in addition to the default tags, simply add the tag to the
-built-in resource `tags` block.
-
-If an AWS resource requires to override a default tag, define a tag with the same key in the `tag`
-block
-
-```terraform
-resource "aws_dynamodb_table" "default-tags-add" {
-  name     = "default-tags-add"
-  .......
-  
-  tags = {
-    cost-center = "Rocket Insights Billing"
-    project     = "Project Override"
-  }
-}
-
-```  
-The final tags for aws_dynamodb_table.default-tags-add are
-
-```
-"cost-center"         = "Rocket Insights Billing"
-"owner"               = "Rocket Insights"
-"project"             = "Project Override"
-"terraform-base-path" = "terraform-blog-default-tags/default-tags"
-```
-
 ### Alternate Default Tags
-If an AWS resource requires alternate default tags, an alternate AWS provider with new default tags can be defined
+If an AWS resource requires alternate default tags, an alternate AWS provider with new default tags can be defined.
 
 ```terraform
 provider "aws" {
@@ -139,10 +114,69 @@ The final tags for aws_dynamodb_table.default-tags-alternate are
 "owner"  = "Alt Owner"
 ```
 
-### Modules and Default Tags
-The AWS default tags apply to existing Terraform AWS modules without any changes needed
+### Add and Override default tags
+If an AWS resource requires more tags in addition to the default tags, simply add the tag to the
+built-in resource `tags` block.
+
+If an AWS resource requires to override a default tag, define a tag with the same key in the `tags`
+block
 
 ```terraform
+locals {
+  terraform-git-repo = "terraform-blog-default-tags"
+}
+
+provider "aws" {
+  region = "us-east-1"
+  default_tags {
+    tags = {
+      owner               = "Rocket Insights"
+      project             = "Project A"
+      terraform-base-path = replace(path.cwd, "/^.*?(${local.terraform-git-repo}\\/)/", "$1")
+    }
+  }
+}
+
+resource "aws_dynamodb_table" "default-tags-add" {
+  name     = "default-tags-add"
+  .......
+  
+  tags = {
+    cost-center = "Rocket Insights Billing"
+    project     = "Project Override"
+  }
+}
+
+```  
+The final tags for aws_dynamodb_table.default-tags-add are
+
+```
+"cost-center"         = "Rocket Insights Billing"
+"owner"               = "Rocket Insights"
+"project"             = "Project Override"
+"terraform-base-path" = "terraform-blog-default-tags/default-tags"
+```
+
+### Modules and Default Tags
+The AWS default tags apply to existing Terraform AWS modules without any changes needed.
+
+```terraform
+locals {
+  terraform-git-repo = "terraform-blog-default-tags"
+}
+
+provider "aws" {
+  region = "us-east-1"
+  default_tags {
+    tags = {
+      owner    = "Rocket Insights"
+      project  = "Project A"
+      terraform-base-path = replace(path.cwd,
+      "/^.*?(${local.terraform-git-repo}\\/)/", "$1")
+    }
+  }
+}
+
 module "default-tags-dynamodb" {
   source = "./tfmodules/default-tags-dynamodb"
 }
@@ -154,47 +188,9 @@ The final tags for module.default-tags-dynamodb.aws_dynamodb_table.default-tags-
 "terraform-base-path" = "terraform-blog-default-tags/default-tags"
 ```
 
-### Add and Override default tags
-If an AWS module requires more tags in addition to the default tags, simply define the module tags 
-variable and add the tag to the module
-
-```terraform
-module "default-tags-dynamodb-add" {
-  source = "./tfmodules/default-tags-dynamodb-add"
-
-  tags = {
-    app-purpose = "Adding Module Tags"
-  }
-}
-```
-```terraform
-// In ./tfmodules/default-tags-dynamodb-add
-variable "tags" {
-  type        = map(string)
-  description = "Additional tags for DynamoDB table"
-}
-resource "aws_dynamodb_table" "default-tags-module-add" {
-  name         = "default-tags-module-add"
-  .......
-  tags = merge(
-    // Tagging Terraform module path helps maintenance      
-    { terraform-module-path = path.module },
-    var.tags
-  )
-}
-```
-The final tags for module.default-tags-dynamodb-add.aws_dynamodb_table.default-tags-module-add are
-```
-"app-purpose   "        = "Adding Module Tags"
-"owner"                 = "Rocket Insights"
-"project"               = "Project A"
-"terraform-base-path"   = "terraform-blog-default-tags/default-tags"
-"terraform-module-path" = "tfmodules/default-tags-dynamodb-add
-```
-
 ### Modules and Alternate Tags
 If an AWS module requires alternate default tags, an alternate AWS provider with new default tags can be defined
-and the new provider can be passed to module
+and the new provider can be passed to module.
 
 ```terraform
 provider "aws" {
@@ -219,8 +215,9 @@ module "default-tags-dynamodb-alternate" {
 The final tags for module.default-tags-dynamodb-alternate.aws_dynamodb_table.default-tags-module are
 ```
 "app-id" = "Terraform Default Tags"
-"owner"  = "Owner B"
+"owner"  = "Alt Owner"
 ```
+
 ### Modules with both Default and Alternate Tags
 If an AWS module requires both the default and alternate default tags, the default and alternate AWS providers can be defined
 and both providers can be passed to module. Then the module can assign which AWS resource uses which AWS provider.
@@ -228,6 +225,10 @@ and both providers can be passed to module. Then the module can assign which AWS
 This is valuable since certain AWS resources like aws_s3_bucket_object have a maximum limit of 10 tags.
 
 ```terraform
+locals {
+  terraform-git-repo = "terraform-blog-default-tags"
+}
+
 provider "aws" {
   region = "us-east-1"
   default_tags {
@@ -288,8 +289,68 @@ will use the assigned AWS provider tags
 ```
 ```terraform
 // module.default-and-alternate-tags-dynamodb.aws_dynamodb_table.default-and-alternate-tags-module-alternate
-"modified" = "Terraform"
-"owner"    = "Owner B"
+"app-id" = "Terraform Default Tags"
+"owner"  = "Alt Owner"
+```
+
+### Modules and Adding and Overriding default tags
+If an AWS module requires more tags in addition to the default tags, simply define the module tags 
+variable and add the tag to the module.
+
+```terraform
+locals {
+  terraform-git-repo = "terraform-blog-default-tags"
+}
+
+provider "aws" {
+  region = "us-east-1"
+  default_tags {
+    tags = {
+      owner    = "Rocket Insights"
+      project  = "Project A"
+      terraform-base-path = replace(path.cwd,
+      "/^.*?(${local.terraform-git-repo}\\/)/", "$1")
+    }
+  }
+}
+
+module "default-tags-dynamodb-add" {
+  source = "./tfmodules/default-tags-dynamodb-add"
+
+  tags = {
+    app-purpose = "Adding Module Tags"
+  }
+}
+```
+```terraform
+// In ./tfmodules/default-tags-dynamodb-add
+variable "tags" {
+  type        = map(string)
+  description = "Additional tags for DynamoDB table"
+}
+resource "aws_dynamodb_table" "default-tags-module-add" {
+  name         = "default-tags-module-add"
+  .......
+  tags = merge(
+    // path.module is a built-in Terraform variable that
+    // describes the path of Terraform module
+    // For this repo, the terraform-module-path is 
+    // tfmodules/default-tags-dynamodb-add
+    // Along with the terraform-base-path tag, this tag helps AWS UI users
+    // discover what module repo to modify      
+  Tagging Terraform module path helps maintenance      
+    { terraform-module-path = path.module },
+    var.tags
+  )
+}
+```
+The final tags for module.default-tags-dynamodb-add.aws_dynamodb_table.default-tags-module-add are
+```
+"app-purpose"           = "Adding Module Tags"
+"owner"                 = "Rocket Insights"
+"project"               = "Project A"
+"terraform-base-path"   = "terraform-blog-default-tags/default-tags"
+"terraform-module-path" = "tfmodules/default-tags-dynamodb-add
 ```
 
 ### Conclusion
