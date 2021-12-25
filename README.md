@@ -1,10 +1,12 @@
 ## Best Practices for Terraform AWS Tags
 
+Rocket Insights [blog article here](https://blog.rocketinsights.com/best-practices-for-terraform-aws-tags/)
+
 [AWS tags](https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html) are key-value labels you can assign to AWS resources 
 that give extra information about it. 
 
 Rocket Insights DevOps practice recommends the following AWS tags best practices:
-* Define an explicit ruleset for tag key naming and stick with it.
+* Define [an explicit ruleset](https://docs.aws.amazon.com/whitepapers/latest/tagging-best-practices/welcome.html) for tag key naming and stick with it.
 
     Inconsistent tags keys such as "appid", "Application ID", and "App_ID" are frustrating to use.
 
@@ -12,7 +14,7 @@ Rocket Insights DevOps practice recommends the following AWS tags best practices
 
     The minimum Rocket Insights recommended set of tags are
 
-    **name**: human-readable resource name
+    **Name**: human-readable resource name. Note that the AWS Console UI displays the case-sensitive "Name" tag.
 
     **app-id**: the application using the resource
 
@@ -48,7 +50,7 @@ This Terraform AWS default tags tutorial demonstrates for both Terraform resourc
 
 For the full Terraform code, please visit the Rocket Insights [Github repo](https://github.com/rocketinsights/terraform-blog-default-tags/tree/main).
 
-For prettier formatting, please visit the Rocket Insights [blog](best-practices-for-terraform-aws-tags).
+For prettier formatting, please visit the Rocket Insights [blog](https://blog.rocketinsights.com/best-practices-for-terraform-aws-tags/).
 
 ### Basic Usage
 
