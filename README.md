@@ -2,6 +2,9 @@
 
 Rocket Insights [blog article here](https://blog.rocketinsights.com/best-practices-for-terraform-aws-tags/)
 
+Thank you for making this blog post so popular. As of December 25, 2021, it is a first page Google search result for
+aws terraform tags . Here is the Part 2, follow-up article about Terraform AWS tags.
+
 [AWS tags](https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html) are key-value labels you can assign to AWS resources 
 that give extra information about it. 
 
