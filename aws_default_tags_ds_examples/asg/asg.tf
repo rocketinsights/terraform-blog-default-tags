@@ -28,6 +28,11 @@ data "aws_default_tags" "provider" {}
 resource "aws_autoscaling_group" "default-tags-asg" {
   name = "default-tags-asg"
 
+  tag {
+    key                 = "Name"
+    value               = "default-tags-asg-ec2"
+    propagate_at_launch = true
+  }
   # Loops through the AWS provider default_tags to generate
   # multiple aws_autoscaling_group specific propagate_at_launch tag.
   # Any EC2 instances launched by this ASG will have these tags
@@ -60,14 +65,19 @@ resource "aws_launch_template" "default-tags-lt" {
   # will have these tags automatically attached
   tag_specifications {
     resource_type = "instance"
-    tags = data.aws_default_tags.provider.tags
+    tags          = data.aws_default_tags.provider.tags
   }
 
   # The EBS volume of the EC2 instances created by this launch template
   # will have these tags automatically attached
   tag_specifications {
     resource_type = "volume"
-    tags = data.aws_default_tags.provider.tags
+    tags = merge(
+      {
+        Name = "default-tags-lt-volume"
+      },
+      data.aws_default_tags.provider.tags
+    )
   }
 }
 
