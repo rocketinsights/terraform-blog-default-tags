@@ -21,7 +21,7 @@ provider "aws" {
   }
 }
 
-# Retrieve the AWS provider default tags for programmatic use
+# Access individual default_tags via the data source
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/default_tags
 data "aws_default_tags" "provider" {}
 

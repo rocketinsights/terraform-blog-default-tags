@@ -22,11 +22,13 @@ provider "aws" {
   }
 }
 
-# Retrieve the AWS provider default tags for programmatic use
+# Access individual default_tags via the data source
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/default_tags
 data "aws_default_tags" "provider" {}
 
 resource "aws_dynamodb_table" "prod-only" {
+  # Only create this DynamoDB table if the
+  # `environment` default tag value is `prod`
   count        = data.aws_default_tags.provider.tags.environment == "prod" ? 1 : 0
   name         = "default-tags-prod-db"
   billing_mode = "PAY_PER_REQUEST"

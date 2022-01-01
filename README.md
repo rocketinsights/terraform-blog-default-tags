@@ -2,8 +2,15 @@
 
 Rocket Insights [blog article here](https://blog.rocketinsights.com/best-practices-for-terraform-aws-tags/)
 
-Thank you for making this blog post so popular. As of December 25, 2021, it is a first page Google search result for
-aws terraform tags . Here is the Part 2, follow-up article about Terraform AWS tags.
+_Update Jan 1, 2022: Thank you for making this blog post so popular. 
+It is a first page Google search result for [`aws terraform tags`](https://www.google.com/search?q=aws+terraform+tags)  ._
+
+_Originally we coded the default tags examples for [Terraform 0.12](https://github.com/rocketinsights/terraform-blog-default-tags/tree/main/default-tags) . 
+We updated the example code for [Terraform 1.0](https://github.com/rocketinsights/terraform-blog-default-tags/tree/main/default-tags-tf1.0) and 
+[Terragrunt](https://github.com/rocketinsights/terraform-blog-default-tags/tree/main/default-tags-terragrunt)._
+
+_I wrote a [follow-up article](README-part2.md) about solutions to bugs and traps when using Terraform AWS tags
+in production._
 
 [AWS tags](https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html) are key-value labels you can assign to AWS resources 
 that give extra information about it. 
@@ -51,7 +58,7 @@ This Terraform AWS default tags tutorial demonstrates for both Terraform resourc
 * Providing alternate default tags
 * Adding and overriding tags to the default
 
-For the full Terraform code, please visit the Rocket Insights [Github repo](https://github.com/rocketinsights/terraform-blog-default-tags/tree/main).
+For the full Terraform code, please visit the Rocket Insights [Github repo](https://github.com/rocketinsights/terraform-blog-default-tags/tree/main/default-tags).
 
 For prettier formatting, please visit the Rocket Insights [blog](https://blog.rocketinsights.com/best-practices-for-terraform-aws-tags/).
 

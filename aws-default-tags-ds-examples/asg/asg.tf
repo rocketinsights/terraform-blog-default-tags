@@ -21,7 +21,7 @@ provider "aws" {
   }
 }
 
-# Retrieve the AWS provider default tags for programmatic use
+# Access individual default_tags via the data source
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/default_tags
 data "aws_default_tags" "provider" {}
 
@@ -63,6 +63,7 @@ resource "aws_launch_template" "default-tags-lt" {
 
   # The EC2 instances created by this launch template
   # will have these tags automatically attached
+  # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/launch_template#tag-specifications
   tag_specifications {
     resource_type = "instance"
     tags          = data.aws_default_tags.provider.tags
@@ -70,8 +71,11 @@ resource "aws_launch_template" "default-tags-lt" {
 
   # The EBS volume of the EC2 instances created by this launch template
   # will have these tags automatically attached
+  # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/launch_template#tag-specifications
   tag_specifications {
     resource_type = "volume"
+    # merge is a Terraform built-in function to combine maps
+    # https://www.terraform.io/language/functions/merge
     tags = merge(
       {
         Name = "default-tags-lt-volume"
