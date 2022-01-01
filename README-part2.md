@@ -111,7 +111,7 @@ resource "aws_dynamodb_table" "partial-identical-bug" {
 
 The above Terraform code will always show the following `terraform plan`
 
-```terraform
+```
 Terraform will perform the following actions:
 
   # aws_dynamodb_table.partial-identical-bug will be updated in-place
